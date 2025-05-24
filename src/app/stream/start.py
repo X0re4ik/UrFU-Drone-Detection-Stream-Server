@@ -29,8 +29,8 @@ logger = Logger
 
 
 INPUT_VIDEO_URL = (
-    ROOT_PATH / "examples" / "rows" / "4.mp4"
-)  # PROJECT_SETTINGS.rtsp_stream.input_url
+    PROJECT_SETTINGS.rtsp_stream.input_url
+)  # ROOT_PATH / "examples" / "rows" / "4.mp4"
 
 stream = RTSPStream(INPUT_VIDEO_URL)
 
