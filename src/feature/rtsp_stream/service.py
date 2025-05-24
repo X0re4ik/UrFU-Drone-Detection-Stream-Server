@@ -11,6 +11,8 @@ class RTSPStream:
         self.rtsp_url = rtsp_url
         self.cap = cv2.VideoCapture(self.rtsp_url)
         self.frame = None
+
+        self._request_frame_id = 0
         self._frame_id = 0
         self.running = True
 
@@ -44,14 +46,21 @@ class RTSPStream:
         return self.frame.copy() if self.frame is not None else None
 
     def get_frame_id(self) -> int:
-        return self._frame_id
+        return self._frame_id - 1
+
+    def get_request_frame_id(self) -> int:
+        return self._request_frame_id - 1
 
     def get_frame_with_skip_every(self, skip_every: int = 5) -> CVFrameType | None:
+
         if skip_every < 1:
+            self._request_frame_id += 1
             return self.frame
 
         if self._frame_id % skip_every == 0:
+            self._request_frame_id += 1
             return self.frame
+
         return None
 
     def stop(self) -> None:

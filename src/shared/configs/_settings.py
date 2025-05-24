@@ -32,15 +32,10 @@ class MongoDBConfig(BaseConfig):
     password: str
     host: str
     port: int
-    name: str
 
     @property
     def URI(self) -> str:
-        return (
-            f"mongodb://{self.user}:{self.password}@"
-            f"{self.host}:{self.port}/"
-            f"{self.name}"
-        )
+        return f"mongodb://{self.user}:{self.password}@{self.host}:{self.port}/"
 
 
 class RTSPStreamConfig(BaseConfig):
@@ -49,9 +44,9 @@ class RTSPStreamConfig(BaseConfig):
     input_url: str
     output_url: str
 
-    output_logger_file: str = Field(default_factory=lambda: "ffmpeg-rtsp")
+    output_logger_file: str = Field(default_factory=lambda: "ffmpeg-rtsp.log")
 
-    output_fps: int = Field(default=25)
+    output_fps: int | None = Field(default=None)
 
     hls_fragment_sec: int = Field(default=2)
 

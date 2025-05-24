@@ -36,3 +36,5 @@ for path_ in [TRACKER_PATH, YOLO_DETECTION_PATH, MOBILE_NET_CLASSIFICATION_PATH]
     if not os.path.exists(path_):
         raise FileNotFoundError(path_)
     logger.info(f"Model Path Exists ({path_})")
+
+logger.info("===="*25 + "\n")

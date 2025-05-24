@@ -58,8 +58,7 @@ class DetectionObjects:
         self._tracker_history = defaultdict(list)
 
         self._max_tracker_detection = 1000
-        
-    
+
     def get_tracker_points(self, tracker_id: int):
         track = self._tracker_history[tracker_id]
         return np.hstack(track).astype(np.int32).reshape((-1, 1, 2))
