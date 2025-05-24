@@ -67,38 +67,38 @@ while stream.is_open():
         logger.debug("Не могу получить Frame")
         continue
 
-    # detections_bbox = detection_service.detect(frame)
+    detections_bbox = detection_service.detect(frame)
 
-    # for detection_bbox in detections_bbox:
-    #     xmin, ymin, xmax, ymax = detection_bbox.bbox
-    #     confidence: float = detection_bbox.confidence
-    #     class_id: int = detection_bbox.class_id
-    #     track_id: int = detection_bbox.track_id
+    for detection_bbox in detections_bbox:
+        xmin, ymin, xmax, ymax = detection_bbox.bbox
+        confidence: float = detection_bbox.confidence
+        class_id: int = detection_bbox.class_id
+        track_id: int = detection_bbox.track_id
 
-    #     points = detection_service.get_tracker_points(track_id)
+        points = detection_service.get_tracker_points(track_id)
 
-    #     draw_set_text(
-    #         frame,
-    #         xmin,
-    #         ymin - 10,
-    #         f"Track: {track_id} | Class ID: {CLASS_MAPPER[class_id]} | Conf: {confidence:.2f}",
-    #     )
-    #     draw_rectangle(frame, xmin, ymin, xmax, ymax)
-    #     draw_track(frame, points)
+        draw_set_text(
+            frame,
+            xmin,
+            ymin - 10,
+            f"Track: {track_id} | Class ID: {CLASS_MAPPER[class_id]} | Conf: {confidence:.2f}",
+        )
+        draw_rectangle(frame, xmin, ymin, xmax, ymax)
+        draw_track(frame, points)
 
-    #     if class_id == 0:
-    #         cropped = frame[ymin:ymax, xmin:xmax]
-    #         if cropped.size == 0:
-    #             continue
+        if class_id == 0:
+            cropped = frame[ymin:ymax, xmin:xmax]
+            if cropped.size == 0:
+                continue
 
-    #         classification = classification_service.get_class(cropped)
+            classification = classification_service.get_class(cropped)
 
-    #         draw_set_text(
-    #             frame,
-    #             xmin,
-    #             ymax + 10,
-    #             f"Model: {MODEL_MAPPER[classification.model_id]} | {classification.confidence:.2f}",
-    #         )
+            draw_set_text(
+                frame,
+                xmin,
+                ymax + 10,
+                f"Model: {MODEL_MAPPER[classification.model_id]} | {classification.confidence:.2f}",
+            )
 
     logger.info(stream.get_frame_id() / output_stream_fps)
     rtsp_sender.send_to_rtsp(frame)
