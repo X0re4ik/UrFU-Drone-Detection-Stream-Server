@@ -51,7 +51,30 @@ class RTSPStreamConfig(BaseConfig):
     hls_fragment_sec: int = Field(default=2)
 
 
+class S3Config(BaseConfig):
+    model_config = SettingsConfigDict(env_prefix="S3_")
+
+    host: str
+    port: int
+    aws_access_key: str
+    aws_secret_key: str
+
+    bucket: str
+
+    use_ssl: bool = Field(default=False)
+
+
+class TelegramBotConfig(BaseConfig):
+    model_config = SettingsConfigDict(env_prefix="TELEGRAM_BOT_")
+
+    user_token: str
+    service_token: str
+    service_chat_id: str
+
+
 class Settings(BaseConfig):
     app: APPConfig = Field(default_factory=APPConfig)
     rtsp_stream: RTSPStreamConfig = Field(default_factory=RTSPStreamConfig)
     mongo_db: MongoDBConfig = Field(default_factory=MongoDBConfig)
+    s3: S3Config = Field(default_factory=S3Config)
+    telegram_bot: TelegramBotConfig = Field(default_factory=TelegramBotConfig)

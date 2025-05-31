@@ -131,7 +131,7 @@ while stream.is_open():
     rtsp_sender.send_to_rtsp(frame)
 
     if PROJECT_SETTINGS.app.develop:
-        # cv2.imshow("Test Frame", frame)
+        cv2.imshow("Test Frame", frame)
         pass
 
     if cv_end():

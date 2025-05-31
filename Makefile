@@ -9,3 +9,10 @@ clean: ## Tidy up local environment
 
 docker-dev:
 	docker compose -f ./docker/docker-compose.yml up
+
+
+run-telegram-server:
+	python -m src.app.telegram.echo
+
+run-rtmp-server:
+	python -m src.app.video.stream.start
