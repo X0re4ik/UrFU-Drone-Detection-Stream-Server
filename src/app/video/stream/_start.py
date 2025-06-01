@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import cv2
 from src.shared.libs.utils._get_current_time import get_current_time
@@ -117,12 +118,10 @@ while stream.is_open():
 
             detection_saver.save(
                 DroneDetectionInfoDTO(
-                    class_name,
-                    detection_bbox.confidence,
-                    [xmin, ymin, xmax, ymax],
-                    model_name,
-                    classification.confidence,
-                    time_in_sec,
+                    model_type=model_name,
+                    model_conf=classification.confidence,
+                    bbox=[xmin, ymin, xmax, ymax],
+                    timestamp=datetime.now(),
                 )
             )
 

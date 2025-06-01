@@ -1,13 +1,9 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
+from datetime import datetime
 
 
-@dataclass
-class DroneDetectionInfoDTO:
-    class_name: str
-    class_conf: float
-    class_bbox: list[float]
-
-    model_name: str
+class DroneDetectionInfoDTO(BaseModel):
+    model_type: str
     model_conf: float
-    
-    time_in_sec: float
+    bbox: list[float]
+    timestamp: datetime

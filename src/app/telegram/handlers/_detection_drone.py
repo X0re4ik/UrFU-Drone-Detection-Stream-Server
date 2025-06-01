@@ -9,6 +9,11 @@ from src.shared.api.save_video_info import save_video_info_api
 from aiogram.enums.parse_mode import ParseMode
 from aiogram import Bot, Dispatcher, types
 
+from .utils import list_potential_targets_message
+
+
+from src.shared.api.yandex.geocode_map import yandex_geocode_map_client_api
+
 logger = Logger
 
 
@@ -17,10 +22,15 @@ async def detection_drone_handler(
     service_bot: Bot,
     target_chat_id: int,
     file_id: int,
+    latitude: float,
+    longitude: float,
 ):
 
+    pos = await yandex_geocode_map_client_api.reverse_geocode(latitude, longitude)
+
     message = await service_bot.send_message(
-        chat_id=target_chat_id, text="❗ВНИМАНИЕ❗\nГраждане сообщают об атаке БПЛА"
+        chat_id=target_chat_id,
+        text=f"❗ВНИМАНИЕ❗\nГраждане сообщают об атаке БПЛА по адресу {pos}",
     )
 
     video_file = await user_bot.get_file(file_id)
@@ -77,6 +87,7 @@ async def detection_drone_handler(
         if drone_data_info is None:
             logger.error("")
             return
+
         await service_bot.send_photo(
             chat_id=target_chat_id,
             photo=types.BufferedInputFile(
@@ -89,4 +100,18 @@ async def detection_drone_handler(
 
     await asyncio.gather(
         *[_send_drone_types(model_type) for model_type in video_result.model_types]
+    )
+
+    drone_data_info = get_drone_type_info_service.get_drone_type_info(
+        video_result.model_types[0]
+    )
+
+    _message = await list_potential_targets_message(
+        longitude, latitude, drone_data_info.cruising_speed
+    )
+    await service_bot.send_message(
+        chat_id=target_chat_id,
+        text=_message,
+        reply_to_message_id=message.message_id,
+        parse_mode=ParseMode.HTML,
     )

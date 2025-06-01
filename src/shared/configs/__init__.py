@@ -35,6 +35,9 @@ logger.info(
     f"[S3] Secret: {PROJECT_SETTINGS.s3.aws_access_key}-{PROJECT_SETTINGS.s3.aws_secret_key}"
 )
 
+logger.info(f"[YANDEX] [SUGGEST] Api Key: {PROJECT_SETTINGS.yandex_map.suggest_api_key}")
+logger.info(f"[YANDEX] [GEOCODE] Api Key: {PROJECT_SETTINGS.yandex_map.geocode_api_key}")
+
 
 TRACKER_PATH = ROOT_DATA / "tracker" / "byte_tracker.yaml"
 YOLO_DETECTION_PATH = ROOT_DATA / "yolo" / "10-05_22_16_best.pt"

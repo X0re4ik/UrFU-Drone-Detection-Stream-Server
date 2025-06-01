@@ -16,7 +16,7 @@ class DetectionSaver:
 
         self._buffer: list[DroneDetectionInfoDTO] = []
 
-        self._buffer_size = 100
+        self._buffer_size = 10
         self._buffer_point = 0
 
     def save(self, drone_detection: DroneDetectionInfoDTO) -> None:
@@ -28,17 +28,15 @@ class DetectionSaver:
 
         logger.info(f"Write To MongoDB Statistics (size={len(self._buffer)})")
 
-        with self._mongo_manager.get_collection("DetectionInfo") as collection:
+        with self._mongo_manager.get_collection("DetectionResult") as collection:
 
             collection.insert_many(
                 [
                     {
-                        "timeInSec": drone_detection.time_in_sec,
-                        "className": drone_detection.class_name,
-                        "classConf": drone_detection.class_conf,
-                        "classBbox": drone_detection.class_bbox,
-                        "modelName": drone_detection.model_name,
+                        "timestamp": drone_detection.timestamp,
+                        "modelType": drone_detection.model_type,
                         "modelConf": drone_detection.model_conf,
+                        "bbox": drone_detection.bbox,
                     }
                     for drone_detection in self._buffer
                 ]

@@ -110,6 +110,7 @@ class StreamDroneDetectionBaseApp:
                     drone_type=model_name,
                     drone_confidence=detection_bbox.confidence,
                     type_confidence=classification.confidence,
+                    bbox=[xmin, ymin, xmax, ymax]
                 )
         return None
 

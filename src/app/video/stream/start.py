@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import cv2
 from src.shared.libs.utils._get_current_time import get_current_time
@@ -66,6 +67,8 @@ rtsp_sender_service = SenderToRTSPStream(
     output_stream_fps,
 )
 
+detection_saver = DetectionSaverFactory.create()
+
 
 class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
 
@@ -81,6 +84,17 @@ class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
 
     def detection_callback(self, frame_id, frame, detection_result, find):
         self._rtsp_sender_service.send_to_rtsp(frame)
+
+        if find:
+            for res in detection_result:
+                detection_saver.save(
+                    DroneDetectionInfoDTO(
+                        model_type=res.drone_type,
+                        model_conf=res.type_confidence,
+                        bbox=res.bbox,
+                        timestamp=datetime.now(),
+                    )
+                )
 
 
 StreamDroneDetectionApp(

@@ -72,9 +72,17 @@ class TelegramBotConfig(BaseConfig):
     service_chat_id: str
 
 
+class YandexMapConfig(BaseConfig):
+    model_config = SettingsConfigDict(env_prefix="YANDEX_MAP_")
+
+    suggest_api_key: str
+    geocode_api_key: str
+
+
 class Settings(BaseConfig):
     app: APPConfig = Field(default_factory=APPConfig)
     rtsp_stream: RTSPStreamConfig = Field(default_factory=RTSPStreamConfig)
     mongo_db: MongoDBConfig = Field(default_factory=MongoDBConfig)
     s3: S3Config = Field(default_factory=S3Config)
     telegram_bot: TelegramBotConfig = Field(default_factory=TelegramBotConfig)
+    yandex_map: YandexMapConfig = Field(default_factory=YandexMapConfig)
