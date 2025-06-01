@@ -59,8 +59,8 @@ class StreamDroneDetectionBaseApp:
 
             objs: list[DroneDetectionResultDTO] = self._detection_drone(frame)
 
-            if PROJECT_SETTINGS.app.develop:
-                # cv2.imshow(f"Test Frame", frame)
+            if PROJECT_SETTINGS.app.use_show:
+                cv2.imshow(f"Test Frame", frame)
                 pass
 
             self.detection_callback(frame_id, frame, objs, len(objs) != 0)
@@ -84,14 +84,6 @@ class StreamDroneDetectionBaseApp:
 
             points = self._detection_object_service.get_tracker_points(track_id)
             class_name = CLASS_MAPPER[class_id]
-            draw_set_text(
-                frame,
-                xmin,
-                ymin - 10,
-                f"Track: {track_id} | Class ID: {class_name} | Conf: {detection_bbox.confidence:.2f}",
-            )
-            draw_rectangle(frame, xmin, ymin, xmax, ymax)
-            draw_track(frame, points)
 
             if class_id == 0:
                 cropped = frame[ymin:ymax, xmin:xmax]
@@ -114,6 +106,14 @@ class StreamDroneDetectionBaseApp:
                         bbox=[xmin, ymin, xmax, ymax],
                     )
                 )
+            draw_set_text(
+                frame,
+                xmin,
+                ymin - 10,
+                f"Track: {track_id} | Class ID: {class_name} | Conf: {detection_bbox.confidence:.2f}",
+            )
+            draw_rectangle(frame, xmin, ymin, xmax, ymax)
+            draw_track(frame, points)
         return results
 
     @abc.abstractmethod

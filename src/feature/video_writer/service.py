@@ -6,10 +6,10 @@ from src.shared.typing import CVFrameType
 
 class VideoWriterService:
 
-    def __init__(self, task_id: str, fps: int, width: int, height: int):
+    def __init__(self, task_id: str, fps: int, width: int, height: int, template_path = "/tmp/drones/processed"):
         self._fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 
-        self._file_path: str = f"/tmp/drones/processed/{task_id}.mp4"
+        self._file_path: str = f"{template_path}/{task_id}.mp4"
 
         self._out = cv2.VideoWriter(
             self._file_path,

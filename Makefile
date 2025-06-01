@@ -16,3 +16,6 @@ run-telegram-server:
 
 run-rtmp-server:
 	python -m src.app.video.stream.start
+
+run-test-server:
+	python -m src.app.video.test.start

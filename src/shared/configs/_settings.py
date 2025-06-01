@@ -18,6 +18,7 @@ class APPConfig(BaseConfig):
     model_config = SettingsConfigDict(env_prefix="APP_")
 
     develop: bool = Field(default=False)
+    use_show: bool = Field(default=False)
     logger_level: str = Field(default="INFO")
 
     device: str = Field(

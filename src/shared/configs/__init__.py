@@ -21,6 +21,7 @@ EXAMPLE_DATA = ROOT_PATH / "examples" / "rows"
 
 
 logger.info(f"[APP] Develop: {mode(PROJECT_SETTINGS.app.develop)}")
+logger.info(f"[APP] Use cv2.imcshow: {mode(PROJECT_SETTINGS.app.use_show)}")
 logger.info(f"[APP] Root Path: {ROOT_PATH}")
 logger.info(f"[APP] Device: {PROJECT_SETTINGS.app.device}")
 
@@ -40,8 +41,8 @@ logger.info(f"[YANDEX] [GEOCODE] Api Key: {PROJECT_SETTINGS.yandex_map.geocode_a
 
 
 TRACKER_PATH = ROOT_DATA / "tracker" / "byte_tracker.yaml"
-YOLO_DETECTION_PATH = ROOT_DATA / "yolo" / "10-05_22_16_best.pt"
-MOBILE_NET_CLASSIFICATION_PATH = ROOT_DATA / "mobile_net" / "best.pth"
+YOLO_DETECTION_PATH = ROOT_DATA / "yolo" / "09-04-2025-best.pt"
+MOBILE_NET_CLASSIFICATION_PATH = ROOT_DATA / "mobile_net" / "17-05-25-resnet18_bpla_1.pth"
 
 for path_ in [TRACKER_PATH, YOLO_DETECTION_PATH, MOBILE_NET_CLASSIFICATION_PATH]:
     if not os.path.exists(path_):
