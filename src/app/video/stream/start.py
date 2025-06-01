@@ -2,7 +2,11 @@ from datetime import datetime
 import logging
 import cv2
 from src.shared.libs.utils._get_current_time import get_current_time
-from src.feature.save_detection_info import DetectionSaverFactory, DroneDetectionInfoDTO
+from src.feature.save_detection_info import (
+    DetectionSaverFactory,
+    DroneDetectionInfoDTO,
+    DetectionSaver,
+)
 from src.shared.api.logger import Logger
 from src.shared.libs.utils._draw import draw_rectangle, draw_set_text, draw_track
 from src.feature.send_to_rtsp.service import SenderToRTSPStream
@@ -67,7 +71,7 @@ rtsp_sender_service = SenderToRTSPStream(
     output_stream_fps,
 )
 
-detection_saver = DetectionSaverFactory.create()
+detection_saver_service = DetectionSaverFactory.create()
 
 
 class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
@@ -77,19 +81,19 @@ class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
         detection_object_service,
         classification_object_service,
         rtsp_sender_service: SenderToRTSPStream,
+        detection_saver_service: DetectionSaver,
     ):
         super().__init__(detection_object_service, classification_object_service)
 
         self._rtsp_sender_service = rtsp_sender_service
+        self._detection_saver_service = detection_saver_service
 
     def detection_callback(self, frame_id, frame, detection_results, find):
         self._rtsp_sender_service.send_to_rtsp(frame)
-
-        if find:
-            logger.debug(f"Found in {frame_id}")
+        logger.info(f"Found in {frame_id} | {detection_results}")
 
         for detection_result in detection_results:
-            detection_saver.save(
+            self._detection_saver_service.save(
                 DroneDetectionInfoDTO(
                     model_type=detection_result.drone_type,
                     model_conf=detection_result.type_confidence,
@@ -100,5 +104,8 @@ class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
 
 
 StreamDroneDetectionApp(
-    detection_service, classification_service, rtsp_sender_service
+    detection_service,
+    classification_service,
+    rtsp_sender_service,
+    detection_saver_service,
 ).detect_from_stream(stream)
