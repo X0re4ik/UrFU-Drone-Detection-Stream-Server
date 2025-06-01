@@ -90,7 +90,6 @@ class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
 
     def detection_callback(self, frame_id, frame, detection_results, find):
         self._rtsp_sender_service.send_to_rtsp(frame)
-        logger.info(f"Found in {frame_id} | {detection_results}")
 
         for detection_result in detection_results:
             self._detection_saver_service.save(
