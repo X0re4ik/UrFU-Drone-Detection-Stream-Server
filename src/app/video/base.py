@@ -63,7 +63,7 @@ class StreamDroneDetectionBaseApp:
                 # cv2.imshow(f"Test Frame", frame)
                 pass
 
-            self.detection_callback(frame_id, frame, objs, len(objs) == 0)
+            self.detection_callback(frame_id, frame, objs, len(objs) != 0)
 
             if cv_end():
                 break

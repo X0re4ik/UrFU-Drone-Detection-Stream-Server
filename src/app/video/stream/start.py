@@ -86,15 +86,17 @@ class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
         self._rtsp_sender_service.send_to_rtsp(frame)
 
         if find:
-            for detection_result in detection_results:
-                detection_saver.save(
-                    DroneDetectionInfoDTO(
-                        model_type=detection_result.drone_type,
-                        model_conf=detection_result.type_confidence,
-                        bbox=detection_result.bbox,
-                        timestamp=datetime.now(),
-                    )
+            logger.debug(f"Found in {frame_id}")
+
+        for detection_result in detection_results:
+            detection_saver.save(
+                DroneDetectionInfoDTO(
+                    model_type=detection_result.drone_type,
+                    model_conf=detection_result.type_confidence,
+                    bbox=detection_result.bbox,
+                    timestamp=datetime.now(),
                 )
+            )
 
 
 StreamDroneDetectionApp(
