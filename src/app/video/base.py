@@ -57,13 +57,13 @@ class StreamDroneDetectionBaseApp:
 
             frame_id: int = stream.get_frame_id()
 
-            objs: list[DroneDetectionResultDTO] | None = self._detection_drone(frame)
+            objs: list[DroneDetectionResultDTO] = self._detection_drone(frame)
 
             if PROJECT_SETTINGS.app.develop:
-                #cv2.imshow(f"Test Frame", frame)
+                # cv2.imshow(f"Test Frame", frame)
                 pass
 
-            self.detection_callback(frame_id, frame, objs, objs is not None)
+            self.detection_callback(frame_id, frame, objs, len(objs) == 0)
 
             if cv_end():
                 break
@@ -73,9 +73,10 @@ class StreamDroneDetectionBaseApp:
 
         return self.after_processing_result_callback()
 
-    def _detection_drone(self, frame: CVFrameType) -> DroneDetectionResultDTO | None:
+    def _detection_drone(self, frame: CVFrameType) -> list[DroneDetectionResultDTO]:
         detections_bbox = self._detection_object_service.detect(frame)
 
+        results = []
         for detection_bbox in detections_bbox:
             xmin, ymin, xmax, ymax = detection_bbox.bbox
             class_id: int = detection_bbox.class_id
@@ -95,7 +96,7 @@ class StreamDroneDetectionBaseApp:
             if class_id == 0:
                 cropped = frame[ymin:ymax, xmin:xmax]
                 if cropped.size == 0:
-                    return None
+                    continue
 
                 classification = self._classification_object_service.get_class(cropped)
                 model_name = MODEL_MAPPER[classification.model_id]
@@ -105,14 +106,15 @@ class StreamDroneDetectionBaseApp:
                     ymax + 10,
                     f"Model: {model_name} | {classification.confidence:.2f}",
                 )
-
-                return DroneDetectionResultDTO(
-                    drone_type=model_name,
-                    drone_confidence=detection_bbox.confidence,
-                    type_confidence=classification.confidence,
-                    bbox=[xmin, ymin, xmax, ymax]
+                results.append(
+                    DroneDetectionResultDTO(
+                        drone_type=model_name,
+                        drone_confidence=detection_bbox.confidence,
+                        type_confidence=classification.confidence,
+                        bbox=[xmin, ymin, xmax, ymax],
+                    )
                 )
-        return None
+        return results
 
     @abc.abstractmethod
     def after_processing_result_callback(self):
@@ -127,7 +129,7 @@ class StreamDroneDetectionBaseApp:
         self,
         frame_id: int,
         frame: CVFrameType,
-        detection_result: list[DroneDetectionResultDTO] | None,
+        detection_results: list[DroneDetectionResultDTO],
         find: bool,
     ) -> None:
         """_summary_

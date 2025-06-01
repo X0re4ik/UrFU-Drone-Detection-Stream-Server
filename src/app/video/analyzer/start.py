@@ -27,8 +27,10 @@ class TelegramBotDroneDetectionApp(StreamDroneDetectionBaseApp):
 
         self._task_id = task_id
 
-    def detection_callback(self, frame_id, frame, detection_result, find):
-        self._video_analyzer_service.update(frame_id, detection_result)
+    def detection_callback(self, frame_id, frame, detection_results, find):
+        if not find:
+            detection_results = None
+        self._video_analyzer_service.update(frame_id, detection_results)
         self._video_writer_service.write(frame)
 
     def after_processing_result_callback(self):

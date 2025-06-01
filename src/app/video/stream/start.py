@@ -82,16 +82,16 @@ class StreamDroneDetectionApp(StreamDroneDetectionBaseApp):
 
         self._rtsp_sender_service = rtsp_sender_service
 
-    def detection_callback(self, frame_id, frame, detection_result, find):
+    def detection_callback(self, frame_id, frame, detection_results, find):
         self._rtsp_sender_service.send_to_rtsp(frame)
 
         if find:
-            for res in detection_result:
+            for detection_result in detection_results:
                 detection_saver.save(
                     DroneDetectionInfoDTO(
-                        model_type=res.drone_type,
-                        model_conf=res.type_confidence,
-                        bbox=res.bbox,
+                        model_type=detection_result.drone_type,
+                        model_conf=detection_result.type_confidence,
+                        bbox=detection_result.bbox,
                         timestamp=datetime.now(),
                     )
                 )
