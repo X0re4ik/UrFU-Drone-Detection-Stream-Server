@@ -24,7 +24,7 @@ class DetectionSaver:
         self._buffer.append(drone_detection)
         self._buffer_point += 1
         if self._buffer_point < self._buffer_size:
-            logger.info(self._buffer_point, self._buffer_size)
+            logger.info(f"{self._buffer_point}, {self._buffer_size}")
             return
 
         logger.info(f"Write To MongoDB Statistics (size={len(self._buffer)})")
