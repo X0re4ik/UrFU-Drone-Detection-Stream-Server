@@ -1,0 +1,14 @@
+[Unit]
+Description=Drone Detection Python Backend
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/apps/drone-detection-server
+ExecStart=/apps/drone-detection-server/.venv/bin/python -m src.app.video.stream.start
+Restart=always
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
