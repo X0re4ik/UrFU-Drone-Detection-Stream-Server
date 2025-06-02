@@ -13,3 +13,4 @@ python3.10 -m venv .venv
 source .venv/bin/activate
 pip install poetry
 poetry install --no-root
+apt install ffmpeg -y
