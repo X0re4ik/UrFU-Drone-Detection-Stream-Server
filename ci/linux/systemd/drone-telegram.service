@@ -6,7 +6,7 @@ After=network.target
 User=root
 Group=root
 WorkingDirectory=/apps/drone-detection-server
-ExecStart=/apps/drone-detection-server/.venv/bin/python -m src.app.video.stream.start
+ExecStart=/apps/drone-detection-server/.venv/bin/python -m src.app.telegram.echo
 Restart=always
 Environment="PYTHONUNBUFFERED=1"
 

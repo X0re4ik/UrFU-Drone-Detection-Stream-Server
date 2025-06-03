@@ -67,7 +67,7 @@ class VideoAnalyzerService:
         filtered = {
             count: duration
             for count, duration in self._count_drones.items()
-            if duration >= self._min_valid_duration
+            if duration >= self._min_valid_duration and count != 0
         }
         if not filtered:
             return 0
@@ -168,10 +168,10 @@ class VideoAnalyzerService:
         axs[1, 1].legend()
 
         plt.tight_layout(rect=[0, 0, 1, 0.96])
-        #plt.show()
+        # plt.show()
 
         buf = io.BytesIO()
         fig.savefig(buf, format="png", bbox_inches="tight")
         buf.seek(0)
-        
+
         return buf

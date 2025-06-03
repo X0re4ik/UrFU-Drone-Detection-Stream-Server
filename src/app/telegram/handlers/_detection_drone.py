@@ -62,6 +62,13 @@ async def detection_drone_handler(
         reply_to_message_id=message.message_id,
     )
 
+    await service_bot.send_photo(
+        chat_id=target_chat_id,
+        photo=types.BufferedInputFile(report_file.getvalue(), filename=report_name),
+        caption="Статистика 📊: ",
+        reply_to_message_id=message.message_id,
+    )
+
     if video_result.count_drones == 0:
         return await service_bot.send_message(
             chat_id=target_chat_id,
@@ -72,13 +79,6 @@ async def detection_drone_handler(
     await service_bot.send_message(
         chat_id=target_chat_id,
         text=f"Количество дронов: {video_result.count_drones}\nМодели дронов {'; '.join(video_result.model_types)}",
-        reply_to_message_id=message.message_id,
-    )
-
-    await service_bot.send_photo(
-        chat_id=target_chat_id,
-        photo=types.BufferedInputFile(report_file.getvalue(), filename=report_name),
-        caption="Статистика 📊: ",
         reply_to_message_id=message.message_id,
     )
 

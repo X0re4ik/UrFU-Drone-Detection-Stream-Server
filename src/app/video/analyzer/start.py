@@ -38,7 +38,8 @@ class TelegramBotDroneDetectionApp(StreamDroneDetectionBaseApp):
         self._video_writer_service.close()
 
         count_drones: int = self._video_analyzer_service.get_count_drones()
-        drone_types: list[str] = self._video_analyzer_service.get_frequent_drone_types()
+        drone_type = self._video_analyzer_service.get_most_frequent_drone_type()
+        drone_types: list[str] = [drone_type] if drone_type else []
 
         report_file = self._video_analyzer_service.report()
         video_file = self._video_writer_service.get_file()
