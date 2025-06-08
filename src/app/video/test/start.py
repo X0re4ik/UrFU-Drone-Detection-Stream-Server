@@ -34,7 +34,7 @@ class TestDroneDetectionApp(StreamDroneDetectionBaseApp):
 
 
 if __name__ == "__main__":
-    VIDEO_NAME = "12"
+    VIDEO_NAME = "Example_11"
     INPUT_VIDEO_URL = ROOT_PATH / "examples" / "rows-shorts" / f"{VIDEO_NAME}.mp4"
     logger.info(f"Начинаю демонстрацию видео {INPUT_VIDEO_URL}")
     OUTPUT_PATH = ROOT_PATH / "examples" / "outputs"
